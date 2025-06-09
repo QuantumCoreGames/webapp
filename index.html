@@ -9,22 +9,61 @@
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
     <style>
         body {
+            /* Propiedades de la imagen de fondo */
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), /* Capa negra uniforme */
+                url('https://github.com/QuantumCoreGames/webapp/blob/main/feature.png?raw=true'); /* Tu URL de imagen */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            
+            /* Otros estilos del body */
             font-family: "Jersey 10", sans-serif;
             text-align: center;
+            color: white;
+            -webkit-text-stroke: 0.1px black;
+            animation: combo 2s ease-in forwards; /* Nombre, duración, tipo y estado final */
         }
 
         h1 {
             font-size: 7vw; 
             font-family: "Jersey 10", sans-serif;
         }
-        p{
+
+        p {
             font-size: 4vw;
+            color: white;
+            -webkit-text-stroke: 1px black;
+        }
+        .wip{
+            opacity: 0;
+            animation: fadeIn 0.3s ease-in forwards;
+            animation-delay: 3s;
+        }
+        /* Definición de la animación Fade-in */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes combo {
+            from{
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to{
+                opacity: 1;
+                transform: scale(1);
+            }
         }
     </style>
 </head>
 <body>
     <h1>Welcome to Drive Rumble</h1>
     <p>This is the main page.</p>
-    <p>🚧Work in progress🚧</p>
+    <p class="wip">🚧Work in progress🚧</p>
 </body>
 </html>
