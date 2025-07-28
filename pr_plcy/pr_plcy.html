@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Doc Text Display</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Apply Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f0; /* Light blank background */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top for longer content */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            margin: 0;
+            overflow-y: auto; /* Allow scrolling if content is long */
+        }
+
+        /* Responsive text sizing for the content */
+        #contentDisplay {
+            font-size: 4vw; /* Adjusts with viewport width */
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px; /* Max width for readability */
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-wrap: break-word; /* Ensures long words break */
+        }
+
+        @media (min-width: 768px) {
+            #contentDisplay {
+                font-size: 2vw; /* Smaller font on larger screens */
+            }
+        }
+
+        @media (min-width: 1024px) {
+            #contentDisplay {
+                font-size: 1.5vw; /* Even smaller on very large screens */
+            }
+        }
+
+        /* Basic styling for pre to preserve formatting */
+        #contentDisplay pre {
+            white-space: pre-wrap; /* Preserves whitespace and wraps text */
+            word-break: break-word; /* Breaks long words */
+            font-family: inherit; /* Inherit font from parent */
+            margin: 0; /* Remove default margin */
+        }
+
+        /* Loading indicator styling */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            position: absolute; /* Center in the viewport */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Hidden by default */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader" id="loader"></div>
+    <div id="contentDisplay">
+        <!-- Content will be loaded here -->
+    </div>
+
+    <script>
+        // IMPORTANT: Replace this with YOUR Google Doc's "Published to web" URL.
+        // Go to your Google Doc > File > Share > Publish to web > Publish, and copy the URL.
+        const docUrl = 'https://docs.google.com/document/d/e/2PACX-1vTHqBv71-X6epNZXUV1OnkhGwkBGO8CEXKMzUcKG4UV74ejDFL-_w7SD9iX0aRz9k6s9qhqbH15BDZ-/pub'; // <<< REPLACE THIS URL
+
+        const contentDisplay = document.getElementById('contentDisplay');
+        const loader = document.getElementById('loader');
+
+        // Function to show the loading spinner
+        function showLoader() {
+            loader.style.display = 'block';
+            contentDisplay.style.display = 'none'; // Hide content while loading
+        }
+
+        // Function to hide the loading spinner
+        function hideLoader() {
+            loader.style.display = 'none';
+            contentDisplay.style.display = 'block'; // Show content after loading
+        }
+
+        // Function to fetch and display the content
+        async function fetchAndDisplayContent() {
+            showLoader(); // Show loading spinner
+
+            try {
+                // Fetch the content from the published URL
+                const response = await fetch(docUrl);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}. Please ensure the document is published to the web.`);
+                }
+
+                const htmlText = await response.text();
+
+                // Create a temporary div to parse the HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlText, 'text/html');
+
+                let extractedText = '';
+                const bodyContent = doc.querySelector('body');
+
+                if (bodyContent) {
+                    // Attempt to find common elements containing text in a published Google Doc
+                    // This logic tries to be robust against minor changes in Google's publishing format.
+                    const paragraphs = bodyContent.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li');
+                    if (paragraphs.length > 0) {
+                        paragraphs.forEach(p => {
+                            // Append text content, add a newline for block elements
+                            extractedText += p.textContent + '\n\n';
+                        });
+                    } else {
+                        // Fallback: if no specific block elements, try to get all text from the body
+                        extractedText = bodyContent.textContent;
+                    }
+                }
+
+                if (extractedText.trim()) {
+                    // Display the extracted text, preserving line breaks
+                    contentDisplay.innerHTML = `<pre>${extractedText.trim()}</pre>`;
+                } else {
+                    contentDisplay.innerHTML = '<p>Error while loading the document.</p>';
+                }
+
+            } catch (error) {
+                console.error('Error fetching or parsing document:', error);
+                contentDisplay.innerHTML = `<p>Error fetching content: ${error.message}.</p>`;
+            } finally {
+                hideLoader(); // Hide loading spinner
+            }
+        }
+
+        // Call the function when the page loads
+        window.onload = fetchAndDisplayContent;
+    </script>
+</body>
+</html>
 
