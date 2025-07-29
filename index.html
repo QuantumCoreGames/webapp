@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://github.com/QuantumCoreGames/webapp/blob/main/icon.ico">
     <style>
         body {
             /* Propiedades de la imagen de fondo */
@@ -24,17 +25,25 @@
             color: white;
             -webkit-text-stroke: 0.1px black;
             animation: combo 2s ease-in forwards; /* Nombre, duración, tipo y estado final */
+            display: flex; /* Añadido para centrar contenido */
+            flex-direction: column; /* Añadido para apilar elementos verticalmente */
+            justify-content: center; /* Centra verticalmente */
+            align-items: center; /* Centra horizontalmente */
+            min-height: 100vh; /* Asegura que el body ocupe toda la altura de la ventana */
+            margin: 0; /* Elimina el margen por defecto del body */
         }
 
         h1 {
             font-size: 7vw; 
             font-family: "Jersey 10", sans-serif;
+            margin-bottom: 20px; /* Espacio debajo del título */
         }
 
         p {
             font-size: 4vw;
             color: white;
             -webkit-text-stroke: 1px black;
+            margin-bottom: 20px; /* Espacio debajo de los párrafos */
         }
         .wip{
             opacity: 0;
@@ -60,11 +69,54 @@
                 transform: scale(1);
             }
         }
+
+        /* Estilos para los botones */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espacio entre los botones */
+            margin-top: 30px; /* Espacio encima del contenedor de botones */
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 3vw; /* Tamaño de fuente relativo al viewport */
+            font-family: "Jersey 10", sans-serif;
+            background-color: #4CAF50; /* Color de fondo */
+            color: white; /* Color del texto */
+            border: none;
+            border-radius: 8px; /* Bordes redondeados */
+            cursor: pointer;
+            text-decoration: none; /* Elimina el subrayado de los enlaces */
+            transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+            -webkit-text-stroke: 0.5px black; /* Borde de texto para los botones */
+            opacity: 0; /* Inicia invisible para la animación */
+            animation: button_anim 0.5s ease-out forwards; /* Aplica la nueva animación */
+            animation-delay: 2s; /* Retrasa la animación 2 seconds more than previous delay (3.5s + 2s = 5.5s) */
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Color de fondo al pasar el ratón */
+        }
+
+        /* Nueva animación de keyframes */
+        @keyframes button_anim {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>Welcome to Drive Rumble</h1>
     <p>This is the main page.</p>
+    <div class="button-container">
+        <a href="https://docs.google.com/document/d/e/2PACX-1vTHqBv71-X6epNZXUV1OnkhGwkBGO8CEXKMzUcKG4UV74ejDFL-_w7SD9iX0aRz9k6s9qhqbH15BDZ-/pub" class="button">Privacy Policy</a>
+        <a href="https://play.google.com/store/apps/details?id=com.anvylgames.driverumble&pli=1" class="button">Download Game</a>
+    </div>
     <p class="wip">🚧 Work in progress 🚧</p>
 </body>
 </html>
